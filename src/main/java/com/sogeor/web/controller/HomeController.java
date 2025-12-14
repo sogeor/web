@@ -36,7 +36,7 @@ public class HomeController {
         model.addAttribute("products", pageResponse);
 
         model.addAttribute("requestPath", "/home");
-        return "home";
+        return "index";
     }
 
 }

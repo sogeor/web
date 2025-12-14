@@ -11,12 +11,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WebClientResponseException.NotFound.class)
     public String handleNotFound(WebClientResponseException.NotFound ex, Model model) {
         model.addAttribute("error", "Resource not found");
+        model.addAttribute("requestPath", "/404");
         return "error/404";
     }
 
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex, Model model) {
         model.addAttribute("error", ex.getMessage());
+        model.addAttribute("requestPath", "/500");
         return "error/500";
     }
 

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html th:replace="~{fragments/layout :: layout (requestPath, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
+<html th:replace="~{fragments/layout :: layout (${requestPath}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
 
 <body>
 <div class="mt-4">
     <h2>Search Results for "<span th:text="${query}"></span>"</h2>
 
-    <div class="alert alert-warning" th:if="${products.content.empty}">
+    <div class="alert alert-warning" th:if="${products.content.isEmpty()}">
         No products found.
     </div>
 

@@ -28,6 +28,7 @@ class SearchController {
         model.addAttribute("products", results);
         model.addAttribute("query", query);
         model.addAttribute("category", category);
+        model.addAttribute("requestPath", "/search");
         return "search";
     }
 

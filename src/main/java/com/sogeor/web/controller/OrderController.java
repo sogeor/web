@@ -24,6 +24,7 @@ public class OrderController {
                              Model model) {
         PageResponse<OrderDto> orders = orderService.getOrders(page, size).block();
         model.addAttribute("orders", orders);
+        model.addAttribute("requestPath", "/orders");
         return "orders";
     }
 

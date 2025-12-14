@@ -16,6 +16,7 @@ public class PaymentController {
     @GetMapping("/{orderId}")
     public String paymentPage(@PathVariable String orderId, Model model) {
         model.addAttribute("orderId", orderId);
+        model.addAttribute("requestPath", "/payment");
         return "payment";
     }
 

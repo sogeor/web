@@ -21,6 +21,7 @@ public class ProductController {
         ProductDetailDto product = productService.getProductDetail(id).block();
         model.addAttribute("product", product.getProduct());
         model.addAttribute("availableQuantity", product.getAvailableQuantity());
+        model.addAttribute("requestPath", "/product");
         return "product";
     }
 
