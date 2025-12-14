@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout (~{::body})}" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div class="mt-4">
+    <h2 th:text="#{order.title}">My Orders</h2>
+
+    <table class="table mt-3">
+        <thead>
+        <tr>
+            <th th:text="#{order.id}">ID</th>
+            <th th:text="#{order.date}">Date</th>
+            <th th:text="#{order.status}">Status</th>
+            <th th:text="#{order.total}">Total</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders.content}">
+            <td th:text="${order.id}">123</td>
+            <td th:text="${order.createdAt}">2025-01-01</td>
+            <td>
+                        <span class="badge"
+                              th:classappend="${order.status == 'COMPLETED' ? 'bg-success' : (order.status == 'CANCELLED' ? 'bg-danger' : 'bg-primary')}"
+                              th:text="${order.status}">PENDING</span>
+            </td>
+            <td th:text="${order.totalAmount} + ' ₽'">100</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{/orders/{id}(id=${order.id})}"
+                   th:text="#{order.details}">Details</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>

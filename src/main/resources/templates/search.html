@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout (~{::body})}" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div class="mt-4">
+    <h2>Search Results for "<span th:text="${query}"></span>"</h2>
+
+    <div class="alert alert-warning" th:if="${products.content.empty}">
+        No products found.
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${products.content.empty}">
+        <div class="col" th:each="product : ${products.content}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${product.name}">Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" th:text="${product.category}">Category</h6>
+                    <p class="card-text" th:text="${product.description}">Desc</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="h5" th:text="${product.price} + ' ₽'">0</span>
+                        <a class="btn btn-primary" th:href="@{/product/{id}(id=${product.id})}">Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

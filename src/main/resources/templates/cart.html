@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout (~{::body})}" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div class="mt-4">
+    <h2 th:text="#{cart.title}">Shopping Cart</h2>
+
+    <div class="alert alert-info mt-3" th:if="${cart.items == null || cart.items.empty}">
+        <span th:text="#{cart.empty}">Empty</span>
+        <a class="alert-link" href="/">Go shopping</a>
+    </div>
+
+    <div th:if="${cart.items != null && !cart.items.empty}">
+        <table class="table table-hover mt-3">
+            <thead>
+            <tr>
+                <th th:text="#{cart.product}">Product</th>
+                <th th:text="#{cart.quantity}">Quantity</th>
+                <th th:text="#{product.price}">Price</th>
+                <th th:text="#{cart.total}">Total</th>
+                <th th:text="#{cart.action}">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${cart.items}">
+                <td>
+                    <a th:href="@{/product/{id}(id=${item.productId})}"
+                       th:text="${item.productName ?: item.productId}">Name</a>
+                </td>
+                <td>
+                    <form class="d-flex" method="post" style="max-width: 150px;" th:action="@{/cart/update}">
+                        <input name="productId" th:value="${item.productId}" type="hidden">
+                        <input class="form-control form-control-sm me-2" min="1" name="quantity" th:value="${item.quantity}"
+                               type="number">
+                        <button class="btn btn-sm btn-outline-secondary" type="submit">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </form>
+                </td>
+                <td th:text="${item.price}">100</td>
+                <td th:text="${item.total}">200</td>
+                <td>
+                    <form method="post" th:action="@{/cart/remove/{id}(id=${item.productId})}">
+                        <button class="btn btn-sm btn-danger" type="submit">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td class="text-end fw-bold" colspan="3">Total:</td>
+                <td class="fw-bold" colspan="2" th:text="${cart.totalAmount} + ' ₽'">0</td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="d-flex justify-content-between">
+            <form method="post" th:action="@{/cart/clear}">
+                <button class="btn btn-outline-danger" th:text="#{cart.clear}" type="submit">Clear</button>
+            </form>
+
+            <form class="d-flex align-items-center" method="post" th:action="@{/orders/create}">
+                <input class="form-control me-2" name="shippingAddress" placeholder="Shipping Address" required
+                       type="text">
+                <select class="form-select me-2" name="paymentMethod" required>
+                    <option value="CARD">Credit Card</option>
+                    <option value="PAYPAL">PayPal</option>
+                </select>
+                <button class="btn btn-success" th:text="#{cart.checkout}" type="submit">Checkout</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

@@ -31,13 +31,17 @@ configurations {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security-oauth2-client")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-security-oauth2-resource-server")
-    testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.springframework.security:spring-security-test")
+
+    implementation("org.webjars:bootstrap:${property("o.webjars.bootstrap")}")
+    implementation("org.webjars.npm:bootstrap-icons:${property("o.webjars.npm.bootstrap-icons")}")
+    implementation("org.webjars:webjars-locator-core")
 
     implementation("org.jetbrains:annotations:${property("o.jetbrains.annotations")}")
     implementation("io.micrometer:micrometer-registry-prometheus")
@@ -45,14 +49,17 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
+    testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-thymeleaf-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-security-oauth2-client-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-security-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-security-oauth2-resource-server-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("o.s.cloud")}")
-    }
 }
 
 tasks.wrapper {

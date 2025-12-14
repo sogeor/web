@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout (~{::body})}" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div class="mt-4">
+    <h2 th:text="#{order.details}">Order Details</h2>
+
+    <div class="card mt-3">
+        <div class="card-header">
+            Order #<span th:text="${order.id}"></span>
+        </div>
+        <div class="card-body">
+            <p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+            <p><strong>Shipping Address:</strong> <span th:text="${order.shippingAddress}"></span></p>
+            <p><strong>Payment Method:</strong> <span th:text="${order.paymentMethod}"></span></p>
+            <p><strong>Total:</strong> <span th:text="${order.totalAmount}"></span></p>
+
+            <div th:if="${order.status != 'CANCELLED' && order.status != 'COMPLETED'}">
+                <form method="post" th:action="@{/orders/{id}/cancel(id=${order.id})}">
+                    <button class="btn btn-danger" th:text="#{order.cancel}" type="submit">Cancel Order</button>
+                </form>
+            </div>
+            <div th:if="${order.status == 'PENDING'}">
+                <a class="btn btn-warning" th:href="@{/payment/{id}(id=${order.id})}">Pay Now</a>
+            </div>
+        </div>
+    </div>
+
+    <a class="btn btn-link mt-3" href="/orders">&larr; Back to Orders</a>
+</div>
+</body>
+
+</html>
