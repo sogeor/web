@@ -39,6 +39,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-security-oauth2-resource-server")
 
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.3.RELEASE")
+
     implementation("org.webjars:bootstrap:${property("o.webjars.bootstrap")}")
     implementation("org.webjars.npm:bootstrap-icons:${property("o.webjars.npm.bootstrap-icons")}")
     implementation("org.webjars:webjars-locator-core")

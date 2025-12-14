@@ -4,12 +4,16 @@ import com.sogeor.web.dto.InventoryDto;
 import com.sogeor.web.dto.PageResponse;
 import com.sogeor.web.dto.ProductDetailDto;
 import com.sogeor.web.dto.ProductDto;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -28,11 +32,12 @@ public class ProductService {
         this.inventoryServiceUrl = inventoryServiceUrl;
     }
 
-    public Mono<PageResponse<ProductDto>> getAllProducts(int page, int size) {
+    public Mono<@NotNull List<ProductDto>> getAllProducts(int page, int size) {
         return webClient.get()
                         .uri(productServiceUrl + "?page={page}&size={size}", page, size)
+                        .accept(MediaType.APPLICATION_JSON)
                         .retrieve()
-                        .bodyToMono(new ParameterizedTypeReference<PageResponse<ProductDto>>() {});
+                        .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
     public Mono<ProductDetailDto> getProductDetail(String id) {
