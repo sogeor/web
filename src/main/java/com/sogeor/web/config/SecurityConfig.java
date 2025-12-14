@@ -12,10 +12,10 @@ import org.springframework.security.web.servlet.util.matcher.PathPatternRequestM
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http.authorizeHttpRequests(
                     auth -> auth.requestMatchers("/", "/search", "/product/**", "/css/**", "/js/**", "/images/**",
-                                                 "/webjars/**", "/error", "/favicon.ico")
+                                                 "/webjars/**", "/error", "/favicon.ico", "/actuator/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
