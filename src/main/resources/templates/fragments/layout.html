@@ -1,71 +1,76 @@
 <!DOCTYPE html>
-<html lang="ru" th:fragment="layout (content)" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" th:fragment="layout (requestPath, content)" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <title th:text="#{app.title}">Sogeor Shop</title>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <style>
-        body {
-            padding-top: 60px;
-        }
-
-        .footer {
-            margin-top: 50px;
-            padding: 20px 0;
-            background: #f8f9fa;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{info.title}"></title>
+    <link th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link th:href="@{/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.css}" rel="stylesheet"
+          crossorigin="anonymous">
+    <script src="https://unpkg.com/htmx.org@1.9.10"
+            integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+            crossorigin="anonymous"></script>
 </head>
 
-<body hx-boost="true">
+<body class="d-flex flex-column min-vh-100"> <!-- hx-boost="true" -->
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
-        <a class="navbar-brand" href="/" th:text="#{app.title}">Sogeor</a>
-        <button class="navbar-toggler" data-bs-target="#navbarCollapse" data-bs-toggle="collapse" type="button">
+        <a class="navbar-brand mb-0 h1" href="/" th:text="#{info.brand}"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false"
+                th:aria-label="#{navbar.button}">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/" th:text="#{nav.home}">Главная</a>
+                    <a class="nav-link" th:classappend="${requestPath == '/home'} ? 'active' : ''"
+                       th:attr="aria-current=${requestPath == '/home'} ? 'page' : null" href="/"
+                       th:text="#{navbar.el.home}"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/cart" th:text="#{nav.cart}">Корзина</a>
+                    <a class="nav-link" th:classappend="${requestPath == '/cart'} ? 'active' : ''"
+                       th:attr="aria-current=${requestPath == '/cart'} ? 'page' : null" href="/cart"
+                       th:text="#{navbar.el.cart}"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/orders" th:text="#{nav.orders}">Заказы</a>
+                    <a class="nav-link" th:classappend="${requestPath == '/orders'} ? 'active' : ''"
+                       th:attr="aria-current=${requestPath == '/orders'} ? 'page' : null" href="/orders"
+                       th:text="#{navbar.el.orders}"></a>
                 </li>
             </ul>
-            <form action="/search" class="d-flex me-2" method="get">
-                <input class="form-control me-2" name="query" th:placeholder="#{search.placeholder}" type="search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" name="query"
+                       th:placeholder="#{navbar.search.placeholder}" th:aria-label="#{navbar.search.aria-label}">
+                <button class="btn btn-outline-success" type="submit" th:text="#{navbar.search.button}"></button>
             </form>
-            <ul class="navbar-nav">
-                <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a class="nav-link" href="/logout" th:text="#{nav.logout}">Выход</a>
-                </li>
+
+            <ul class="d-flex navbar-nav">
                 <li class="nav-item" th:unless="${#authorization.expression('isAuthenticated()')}">
-                    <a class="nav-link" href="/oauth2/authorization/keycloak-user" th:text="#{nav.login}">Вход</a>
+                    <a class="nav-link" href="/oauth2/authorization/keycloak-public"
+                       th:text="#{navbar.auth-button.non-authorized}"></a>
+                </li>
+                <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a class="nav-link" href="/logout" th:text="#{navbar.auth-button.authorized}"></a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container" id="main-content">
+<main class="container" id="main-content">
     <div th:replace="${content}"></div>
-</div>
+</main>
 
-<footer class="footer container-fluid text-center">
-    <span class="text-muted">© 2025 Sogeor Shop</span>
+<footer class="footer container-fluid text-center mt-auto">
+    <span class="text-muted">Все права защищены, 2025 — Интернет-магазин обуви и одежды</span>
 </footer>
 
-<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
 </body>
 
 </html>

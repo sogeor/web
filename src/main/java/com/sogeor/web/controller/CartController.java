@@ -26,6 +26,8 @@ public class CartController {
         } catch (Exception e) {
             model.addAttribute("cart", new CartDto());
         }
+
+        model.addAttribute("requestPath", "/cart");
         return "cart";
     }
 

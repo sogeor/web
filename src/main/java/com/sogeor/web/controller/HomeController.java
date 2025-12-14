@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,17 +21,22 @@ public class HomeController {
     @GetMapping("/")
     public String home(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "12") int size,
                        Model model) {
+        long numberOfProducts = Objects.requireNonNull(productService.getNumberOfProducts().block());
+        long numberOfPages = Objects.requireNonNull(productService.getNumberOfPages(size).block());
+
         List<ProductDto> products = productService.getAllProducts(page, size).block();
 
         PageResponse<ProductDto> pageResponse = new PageResponse<>();
         pageResponse.setContent(products);
-        pageResponse.setTotalPages(page + 3);
-        pageResponse.setTotalElements(-1);
+        pageResponse.setTotalPages(Math.toIntExact(numberOfPages));
+        pageResponse.setTotalElements(numberOfProducts);
         pageResponse.setNumber(page);
         pageResponse.setSize(size);
 
         model.addAttribute("products", pageResponse);
-        return "index";
+
+        model.addAttribute("requestPath", "/home");
+        return "home";
     }
 
 }

@@ -16,7 +16,7 @@ public class CartService {
 
     private final String cartServiceUrl;
 
-    public CartService(@Qualifier("userWebClient") WebClient webClient,
+    public CartService(@Qualifier("public") WebClient webClient,
                        @Value("${sogeor.services.cart}") String cartServiceUrl) {
         this.webClient = webClient;
         this.cartServiceUrl = cartServiceUrl;

@@ -3,7 +3,6 @@ package com.sogeor.web.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
@@ -18,34 +17,31 @@ public class WebClientConfig {
     public OAuth2AuthorizedClientManager authorizedClientManager(
             ClientRegistrationRepository clientRegistrationRepository,
             OAuth2AuthorizedClientRepository authorizedClientRepository) {
+        final var authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
+                                                                                  .authorizationCode()
+                                                                                  .refreshToken()
+                                                                                  .clientCredentials()
+                                                                                  .build();
 
-        OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
-                                                                                                       .authorizationCode()
-                                                                                                       .refreshToken()
-                                                                                                       .clientCredentials()
-                                                                                                       .build();
-
-        DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(
-                clientRegistrationRepository, authorizedClientRepository);
+        final var authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(clientRegistrationRepository,
+                                                                                     authorizedClientRepository);
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
         return authorizedClientManager;
     }
 
-    @Bean("systemWebClient")
-    public WebClient systemWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
-                authorizedClientManager);
-        oauth2Client.setDefaultClientRegistrationId("keycloak-system");
+    @Bean("public")
+    public WebClient publicWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
+        final var oauth2Client = new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+        oauth2Client.setDefaultOAuth2AuthorizedClient(true);
 
         return WebClient.builder().filter(oauth2Client).build();
     }
 
-    @Bean("userWebClient")
-    public WebClient userWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
-                authorizedClientManager);
-        oauth2Client.setDefaultOAuth2AuthorizedClient(true);
+    @Bean("system")
+    public WebClient systemWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
+        final var oauth2Client = new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+        oauth2Client.setDefaultClientRegistrationId("keycloak-system");
 
         return WebClient.builder().filter(oauth2Client).build();
     }

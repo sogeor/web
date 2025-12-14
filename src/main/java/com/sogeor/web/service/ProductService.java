@@ -24,7 +24,7 @@ public class ProductService {
 
     private final String inventoryServiceUrl;
 
-    public ProductService(@Qualifier("systemWebClient") WebClient webClient,
+    public ProductService(@Qualifier("system") WebClient webClient,
                           @Value("${sogeor.services.products}") String productServiceUrl,
                           @Value("${sogeor.services.inventory}") String inventoryServiceUrl) {
         this.webClient = webClient;
@@ -71,6 +71,17 @@ public class ProductService {
                                                      .build())
                         .retrieve()
                         .bodyToMono(new ParameterizedTypeReference<PageResponse<ProductDto>>() {});
+    }
+
+    public Mono<@NotNull Long> getNumberOfProducts() {
+        return webClient.get().uri(productServiceUrl + "/numberOfProducts").retrieve().bodyToMono(Long.class);
+    }
+
+    public Mono<@NotNull Long> getNumberOfPages(int pageSize) {
+        return webClient.get()
+                        .uri(productServiceUrl + "/numberOfPages?size={size}", pageSize)
+                        .retrieve()
+                        .bodyToMono(Long.class);
     }
 
 }

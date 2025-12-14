@@ -18,7 +18,7 @@ public class OrderService {
 
     private final String orderServiceUrl;
 
-    public OrderService(@Qualifier("userWebClient") WebClient webClient,
+    public OrderService(@Qualifier("public") WebClient webClient,
                         @Value("${sogeor.services.orders}") String orderServiceUrl) {
         this.webClient = webClient;
         this.orderServiceUrl = orderServiceUrl;
