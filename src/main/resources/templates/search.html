@@ -9,7 +9,7 @@
         No products found.
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${products.content.empty}">
+    <div class="row row-cols-1 row-cols-md-3 g-4" th:unless="${#strings.isEmpty(products.content)}">
         <div class="col" th:each="product : ${products.content}">
             <div class="card h-100">
                 <div class="card-body">
@@ -18,7 +18,7 @@
                     <p class="card-text" th:text="${product.description}">Desc</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="h5" th:text="${product.price} + ' ₽'">0</span>
-                        <a class="btn btn-primary" th:href="@{/product/{id}(id=${product.id})}">Details</a>
+                        <a class="btn btn-primary" th:href="@{/product/{id}(id=${product.uuid})}">Details</a>
                     </div>
                 </div>
             </div>

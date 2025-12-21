@@ -15,7 +15,7 @@
                         <p class="card-text" th:text="${product.description}">Описание</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="h5" th:text="${product.price} + ' ₽'">0 ₽</span>
-                            <a class="btn btn-primary" th:href="@{/product/{id}(id=${product.id})}">Детали</a>
+                            <a class="btn btn-primary" th:href="@{/product/{id}(id=${product.uuid})}">Детали</a>
                         </div>
                     </div>
                 </div>
